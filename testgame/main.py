@@ -1,4 +1,5 @@
 import pygame
+from sprite import Sprite
 
 RESOLUTION = (1920, 1080)
 print(RESOLUTION)
@@ -11,15 +12,19 @@ dt = 0
 
 player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
 
+sprite = Sprite()
+bg = pygame.image.load("testgame/assets/wallpaper.png")
+bg = pygame.transform.scale(bg,RESOLUTION)
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-    screen.fill("blue")
+    screen.blit(bg,(0,0))
     
-    pygame.draw.circle(screen, "pink", player_pos, 40)
-    
+    # pygame.draw.circle(screen, "Pink", player_pos, 40)
+    screen.blit(sprite.image,player_pos)
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
         player_pos.y -= 300 * dt
