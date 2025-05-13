@@ -1,5 +1,6 @@
 import pygame
 from sprite import Sprite
+from food import Food
 
 RESOLUTION = (1920, 1080)
 print(RESOLUTION)
@@ -10,9 +11,18 @@ clock = pygame.time.Clock()
 running = True
 dt = 0
 
+def create_food(amount:int) -> list[Food]:
+    food = []
+    for i in range(amount):
+        food.append(Food(RESOLUTION))
+        
+    return food
+
 player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
 
 sprite = Sprite()
+# food = Food(RESOLUTION)
+food = create_food(3)
 bg = pygame.image.load("testgame/assets/wallpaper.png")
 bg = pygame.transform.scale(bg,RESOLUTION)
 
@@ -25,6 +35,11 @@ while running:
     
     # pygame.draw.circle(screen, "Pink", player_pos, 40)
     screen.blit(sprite.image,player_pos)
+    
+    for f in food:
+        f.render(screen)
+    # food.render(screen)
+    
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
         player_pos.y -= 300 * dt
