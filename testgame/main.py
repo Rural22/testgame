@@ -10,6 +10,8 @@ screen = pygame.display.set_mode()
 clock = pygame.time.Clock()
 running = True
 dt = 0
+score_text = pygame.font.SysFont('VCR OSD MONO', 60, bold=True)
+score_value = 0
 
 def create_food(amount:int) -> list[Food]:
     food = []
@@ -35,10 +37,19 @@ while running:
     
     # pygame.draw.circle(screen, "Pink", player_pos, 40)
     screen.blit(sprite.image,player_pos)
-    
-    for f in food:
+    eaten_food = []
+    for i,f in enumerate(food):
+        if f.is_colliding(player_pos):
+            print("FOOD COLLIDE")
+            eaten_food.append(i)
+            
         f.render(screen)
+    for i in eaten_food:
+        food.pop(i)
+        score_value += 1
     # food.render(screen)
+    render_surface = score_text.render(f'SCORE = {score_value}', False, pygame.Color(25, 255, 255))
+    screen.blit(render_surface, (5,5))
     
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
