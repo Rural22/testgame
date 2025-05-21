@@ -1,6 +1,9 @@
 import pygame
 from sprite import Sprite
 from food import Food
+import logging
+
+logging.basicConfig(filename='game.log', level=logging.DEBUG)
 
 RESOLUTION = (1920, 1080)
 print(RESOLUTION)
@@ -10,6 +13,7 @@ screen = pygame.display.set_mode()
 clock = pygame.time.Clock()
 running = True
 dt = 0
+debug_text = pygame.font.SysFont('VCR OSD MONO', 30)
 score_text = pygame.font.SysFont('VCR OSD MONO', 60, bold=True)
 score_value = 0
 
@@ -20,9 +24,7 @@ def create_food(amount:int) -> list[Food]:
         
     return food
 
-player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
-
-sprite = Sprite()
+sprite = Sprite(screen)
 # food = Food(RESOLUTION)
 food = create_food(3)
 bg = pygame.image.load("testgame/assets/wallpaper.png")
@@ -35,11 +37,11 @@ while running:
 
     screen.blit(bg,(0,0))
     
-    # pygame.draw.circle(screen, "Pink", player_pos, 40)
-    screen.blit(sprite.image,player_pos)
+    # pygame.draw.circle(screen, "Pink", sprite.player_pos, 40)
+    screen.blit(sprite.image,sprite.player_pos)
     eaten_food = []
     for i,f in enumerate(food):
-        if f.is_colliding(player_pos):
+        if f.is_colliding(sprite.player_pos):
             print("FOOD COLLIDE")
             eaten_food.append(i)
             
@@ -50,17 +52,12 @@ while running:
     # food.render(screen)
     render_surface = score_text.render(f'SCORE = {score_value}', False, pygame.Color(25, 255, 255))
     screen.blit(render_surface, (5,5))
+    render_surface = debug_text.render(f'pos: {sprite.player_pos.x = } : {sprite.player_pos.y = }', False, pygame.Color(25, 25, 255))
+    screen.blit(render_surface, (5,90))
     
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_w]:
-        player_pos.y -= 300 * dt
-    if keys[pygame.K_s]:
-        player_pos.y += 300 * dt
-    if keys[pygame.K_a]:
-        player_pos.x -= 300 * dt
-    if keys[pygame.K_d]:
-        player_pos.x += 300 * dt
-        
+    sprite.movement(keys,dt)
+    
     if keys[pygame.K_ESCAPE]:
         running = False
             
