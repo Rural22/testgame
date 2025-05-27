@@ -2,6 +2,8 @@ import pygame
 from sprite import Sprite
 from food import Food
 import logging
+from food_logic import FoodManager
+
 
 logging.basicConfig(filename='game.log', level=logging.DEBUG)
 
@@ -17,16 +19,8 @@ debug_text = pygame.font.SysFont('VCR OSD MONO', 30)
 score_text = pygame.font.SysFont('VCR OSD MONO', 60, bold=True)
 score_value = 0
 
-def create_food(amount:int) -> list[Food]:
-    food = []
-    for i in range(amount):
-        food.append(Food(RESOLUTION))
-        
-    return food
-
 sprite = Sprite(screen)
-# food = Food(RESOLUTION)
-food = create_food(1)
+food = FoodManager(1, RESOLUTION)
 bg = pygame.image.load("testgame/assets/wallpaper.png")
 bg = pygame.transform.scale(bg,RESOLUTION)
 
@@ -39,18 +33,20 @@ while running:
     
     # pygame.draw.circle(screen, "Pink", sprite.player_pos, 40)
     screen.blit(sprite.image,sprite.player_pos)
-    eaten_food = []
-    for i,f in enumerate(food):
-        if f.is_colliding(sprite.player_pos):
-            print("FOOD COLLIDE")
-            eaten_food.append(i)
-            
-        f.render(screen)
-    for i in eaten_food:
-        food.pop(i)
-        score_value += 1
-        food.append(Food(RESOLUTION))
+    # eaten_food = []
+    # for i,f in enumerate(food):
+    #     if f.is_colliding(sprite.player_pos):
+    #         print("FOOD COLLIDE")
+    #         eaten_food.append(i)
+    score_value += food.collision(sprite)
+    
+    #     f.render(screen)
+    # for i in eaten_food:
+    #     food.pop(i)
+    #     score_value += 1
+    #     food.append(Food(RESOLUTION))
     # food.render(screen)
+    food.render_screen(screen)
     render_surface = score_text.render(f'SCORE = {score_value}', False, pygame.Color(25, 255, 255))
     screen.blit(render_surface, (5,5))
     render_surface = debug_text.render(f'pos: {sprite.player_pos.x = } : {sprite.player_pos.y = }', False, pygame.Color(25, 25, 255))
