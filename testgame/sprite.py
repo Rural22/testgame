@@ -13,13 +13,13 @@ class Sprite(pygame.sprite.Sprite):
         )
 
     def movement(self, keys: dict, dt):
-        if keys[pygame.K_w]:
+        if keys[pygame.K_w] or keys[pygame.K_UP]:
             self.player_pos.y -= 350 * dt
-        if keys[pygame.K_s]:
+        if keys[pygame.K_s] or keys[pygame.K_DOWN]:
             self.player_pos.y += 350 * dt
-        if keys[pygame.K_a]:
+        if keys[pygame.K_a] or keys[pygame.K_LEFT]:
             self.player_pos.x -= 350 * dt
-        if keys[pygame.K_d]:
+        if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
             self.player_pos.x += 350 * dt
         self.check_bounds()
 

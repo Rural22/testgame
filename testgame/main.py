@@ -26,7 +26,7 @@ def create_food(amount:int) -> list[Food]:
 
 sprite = Sprite(screen)
 # food = Food(RESOLUTION)
-food = create_food(3)
+food = create_food(1)
 bg = pygame.image.load("testgame/assets/wallpaper.png")
 bg = pygame.transform.scale(bg,RESOLUTION)
 
@@ -49,6 +49,7 @@ while running:
     for i in eaten_food:
         food.pop(i)
         score_value += 1
+        food.append(Food(RESOLUTION))
     # food.render(screen)
     render_surface = score_text.render(f'SCORE = {score_value}', False, pygame.Color(25, 255, 255))
     screen.blit(render_surface, (5,5))
